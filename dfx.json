@@ -1,0 +1,29 @@
+{
+  "canisters": {
+    "demo_payment_backend": {
+      "main": "src/demo_payment_backend/main.mo",
+      "type": "motoko"
+    },
+    "demo_payment_frontend": {
+      "dependencies": [
+        "demo_payment_backend"
+      ],
+      "frontend": {
+        "entrypoint": "src/demo_payment_frontend/src/index.html"
+      },
+      "source": [
+        "src/demo_payment_frontend/assets",
+        "dist/demo_payment_frontend/"
+      ],
+      "type": "assets"
+    }
+  },
+  "defaults": {
+    "build": {
+      "args": "",
+      "packtool": ""
+    }
+  },
+  "output_env_file": ".env",
+  "version": 1
+}
