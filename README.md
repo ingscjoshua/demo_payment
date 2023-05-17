@@ -26,10 +26,11 @@ If you want to test your project locally, you can use the following commands:
 
 ```bash
 # Starts the replica, running in the background
-dfx start --background
+dfx start --clean --background
 
 # Deploys your canisters to the replica and generates your candid interface
-dfx deploy
+dfx deploy --argument '(360000000000)'
+#This example sets the capacity for the canister to 360,000,000,000 cycles.
 ```
 
 Once the job completes, your application will be available at `http://localhost:4943?canisterId={asset_canister_id}`.
