@@ -1,39 +1,29 @@
 import Nat "mo:base/Nat";
 import Nat64 "mo:base/Nat64";
 import Cycles "mo:base/ExperimentalCycles";
+import D "mo:base/Debug";
 
 actor class Donations(
        capacity: Nat
                       ) {
-  var balance = 0;
+  let limit = 10_000_000;
 
-    // Return the current cycle balance
-    public shared(msg) func wallet_balance() : async Nat {
-      return balance;
+    public func wallet_balance() : async Nat {
+      return Cycles.balance();
     };
 
-    // Return the cycles received up to the capacity allowed
     public func wallet_receive() : async { accepted: Nat64 } {
-      let amount = Cycles.available();
-      let limit : Nat = capacity - balance;
-      let accepted =
-        if (amount <= limit) amount
-        else limit;
-      let deposit = Cycles.accept(accepted);
-      assert (deposit == accepted);
-      balance += accepted;
+      let available = Cycles.available();
+      let accepted = Cycles.accept(Nat.min(available, limit));
       { accepted = Nat64.fromNat(accepted) };
     };
 
-    // Return the greeting
-    public func greet(name : Text) : async Text {
-      return "Hello, " # name # "!";
-    };
-
-    // Return the principal of the caller/user identity
-    public shared(msg) func owner() : async Principal {
-      let currentOwner = msg.caller;
-      return currentOwner;
+    public func transfer(
+      receiver : shared () -> async (),
+      amount : Nat) : async { refunded : Nat } {
+        Cycles.add(amount);
+        await receiver();
+        { refunded = Cycles.refunded() };
     };
 
   };

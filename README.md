@@ -29,8 +29,10 @@ If you want to test your project locally, you can use the following commands:
 dfx start --clean --background
 
 # Deploys your canisters to the replica and generates your candid interface
-dfx deploy --argument '(360000000000)'
-#This example sets the capacity for the canister to 360,000,000,000 cycles.
+dfx deploy --argument '(2000000000000)'
+#This example sets the capacity for the canister to 2,000,000,000,000 cycles.
+#Test your send 
+dfx canister call $(dfx identity get-wallet) wallet_send "(record { canister = principal \"$(dfx canister id demo_payment_backend)\"; amount = (2000000000000:nat64); } )"
 ```
 
 Once the job completes, your application will be available at `http://localhost:4943?canisterId={asset_canister_id}`.
